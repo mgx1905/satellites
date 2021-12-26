@@ -10,6 +10,8 @@ import com.mgx1905.satellites.R
 import com.mgx1905.satellites.base.common.Resource
 import com.mgx1905.satellites.base.ui.BaseFragment
 import com.mgx1905.satellites.databinding.FragmentSatellitesListBinding
+import com.mgx1905.satellites.ui.detail.SatelliteDetailFragment
+import com.mgx1905.satellites.ui.list.adapter.SatellitesListAdapter
 import com.mgx1905.satellites.utils.viewBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
@@ -30,6 +32,12 @@ class SatellitesListFragment : BaseFragment(R.layout.fragment_satellites_list) {
 
     private val viewModel: SatellitesListViewModel by viewModels()
 
+    private val satellitesListAdapter by lazy(LazyThreadSafetyMode.NONE) {
+        SatellitesListAdapter {
+            navigationListener.navigate(SatelliteDetailFragment.newInstance(it))
+        }
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -38,9 +46,7 @@ class SatellitesListFragment : BaseFragment(R.layout.fragment_satellites_list) {
     }
 
     private fun initUI() {
-        binding.textView.setOnClickListener {
-            viewModel.getSatellitesList()
-        }
+        binding.recyclerView.adapter = satellitesListAdapter
     }
 
     private fun observers() {
@@ -48,11 +54,15 @@ class SatellitesListFragment : BaseFragment(R.layout.fragment_satellites_list) {
             satellitesList.onEach {
                 when (it) {
                     is Resource.Success -> {
-                        Toast.makeText(requireContext(), "Success", Toast.LENGTH_SHORT).show()
+                        if (it.data.isNullOrEmpty().not()) {
+                            satellitesListAdapter.submitList(it.data.toList())
+                        } else {
+                            showAlert(message = "Empty or null list!")
+                        }
                     }
 
                     is Resource.Failure -> {
-                        Toast.makeText(requireContext(), "Failure", Toast.LENGTH_SHORT).show()
+                        showAlert(message = "Failure!")
                     }
 
                     is Resource.Loading -> {

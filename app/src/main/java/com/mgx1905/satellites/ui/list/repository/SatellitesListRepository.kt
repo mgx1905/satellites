@@ -1,7 +1,7 @@
 package com.mgx1905.satellites.ui.list.repository
 
 import com.mgx1905.satellites.base.common.ApiResult
-import com.mgx1905.satellites.data.Satellites
+import com.mgx1905.satellites.data.Satellite
 
 /**
  * Created by mgx1905 on 26.12.2021
@@ -9,5 +9,5 @@ import com.mgx1905.satellites.data.Satellites
 
 interface SatellitesListRepository {
 
-    suspend fun getSatellites(): ApiResult<Array<Satellites>>
+    suspend fun getSatellites(): ApiResult<Array<Satellite>>
 }
