@@ -6,6 +6,7 @@ import com.mgx1905.satellites.base.common.ApiResult
 import com.mgx1905.satellites.base.common.Resource
 import com.mgx1905.satellites.data.Satellite
 import com.mgx1905.satellites.ui.list.usecases.SatellitesListUseCase
+import com.mgx1905.satellites.utils.postDelay
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -33,7 +34,9 @@ class SatellitesListViewModel @Inject constructor(private val satellitesListUseC
         satellitesListUseCase.execute(Any()).onEach {
             when (it) {
                 is ApiResult.Success -> {
-                    _satellitesList.value = Resource.Success(it.response ?: emptyArray())
+                    postDelay(1500) {
+                        _satellitesList.value = Resource.Success(it.response ?: emptyArray())
+                    }
                 }
                 is ApiResult.Failure -> {
                     _satellitesList.value = Resource.Failure(it.error)

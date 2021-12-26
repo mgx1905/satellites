@@ -1,11 +1,11 @@
 package com.mgx1905.satellites.ui.list
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
-import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.DividerItemDecoration
 import com.mgx1905.satellites.R
 import com.mgx1905.satellites.base.common.Resource
 import com.mgx1905.satellites.base.ui.BaseFragment
@@ -46,12 +46,16 @@ class SatellitesListFragment : BaseFragment(R.layout.fragment_satellites_list) {
     }
 
     private fun initUI() {
-        binding.recyclerView.adapter = satellitesListAdapter
+        binding.recyclerView.apply {
+            adapter = satellitesListAdapter
+            addItemDecoration(DividerItemDecoration(this.context, DividerItemDecoration.VERTICAL))
+        }
     }
 
     private fun observers() {
         with(viewModel) {
             satellitesList.onEach {
+                binding.progressBar.isVisible = it is Resource.Loading
                 when (it) {
                     is Resource.Success -> {
                         if (it.data.isNullOrEmpty().not()) {
@@ -63,10 +67,6 @@ class SatellitesListFragment : BaseFragment(R.layout.fragment_satellites_list) {
 
                     is Resource.Failure -> {
                         showAlert(message = "Failure!")
-                    }
-
-                    is Resource.Loading -> {
-                        Toast.makeText(requireContext(), "Loading", Toast.LENGTH_SHORT).show()
                     }
                 }
             }.launchIn(viewLifecycleOwner.lifecycleScope)
