@@ -11,6 +11,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity : BaseActivity(R.layout.activity_main) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        currentFragmentId = R.id.container
 
         supportFragmentManager.commit {
             add(R.id.container, SatellitesListFragment.newInstance())
