@@ -1,4 +1,4 @@
-package com.mgx1905.satellites.base.data
+package com.mgx1905.satellites.base.common
 
 import kotlinx.coroutines.flow.Flow
 

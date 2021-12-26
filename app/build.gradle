@@ -49,6 +49,7 @@ ext {
     hilt_version = "2.38.1"
     hilt_lifecycler_version = "1.0.0-alpha03"
     serialization_version = "1.3.2"
+    retrofit_version = "2.9.0"
 }
 
 dependencies {
@@ -81,4 +82,7 @@ dependencies {
 
     //Serialization
     implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:$serialization_version"
+
+    //Retrofit
+    implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
 }
