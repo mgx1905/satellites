@@ -8,6 +8,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.mgx1905.satellites.R
 import com.mgx1905.satellites.base.common.Resource
+import com.mgx1905.satellites.base.listener.DelayedOnQueryTextListener
 import com.mgx1905.satellites.base.ui.BaseFragment
 import com.mgx1905.satellites.databinding.FragmentSatellitesListBinding
 import com.mgx1905.satellites.ui.detail.SatelliteDetailFragment
@@ -42,6 +43,7 @@ class SatellitesListFragment : BaseFragment(R.layout.fragment_satellites_list) {
         super.onViewCreated(view, savedInstanceState)
 
         initUI()
+        listeners()
         observers()
     }
 
@@ -52,17 +54,21 @@ class SatellitesListFragment : BaseFragment(R.layout.fragment_satellites_list) {
         }
     }
 
+    private fun listeners() {
+        binding.searchView.setOnQueryTextListener(object : DelayedOnQueryTextListener() {
+            override fun onDelayerQueryTextChange(query: String?) {
+                viewModel.filterList(query ?: "")
+            }
+        })
+    }
+
     private fun observers() {
         with(viewModel) {
-            satellitesList.onEach {
+            satellitesListObservable.onEach {
                 binding.progressBar.isVisible = it is Resource.Loading
                 when (it) {
                     is Resource.Success -> {
-                        if (it.data.isNullOrEmpty().not()) {
-                            satellitesListAdapter.submitList(it.data.toList())
-                        } else {
-                            showAlert(message = "Empty or null list!")
-                        }
+                        satellitesListAdapter.submitList(it.data)
                     }
 
                     is Resource.Failure -> {

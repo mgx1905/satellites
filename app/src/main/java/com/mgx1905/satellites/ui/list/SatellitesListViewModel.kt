@@ -21,27 +21,44 @@ import javax.inject.Inject
 @HiltViewModel
 class SatellitesListViewModel @Inject constructor(private val satellitesListUseCase: SatellitesListUseCase) : ViewModel() {
 
-    private val _satellitesList = MutableStateFlow<Resource<Array<Satellite>>>(Resource.Loading)
-    val satellitesList = _satellitesList as StateFlow<Resource<Array<Satellite>>>
+    private var satellitesList = mutableListOf<Satellite>()
+
+    private val _satellitesListObservable = MutableStateFlow<Resource<MutableList<Satellite>>>(Resource.Loading)
+    val satellitesListObservable = _satellitesListObservable as StateFlow<Resource<MutableList<Satellite>>>
 
     init {
         getSatellitesList()
     }
 
     private fun getSatellitesList() {
-        _satellitesList.value = Resource.Loading
+        _satellitesListObservable.value = Resource.Loading
 
         satellitesListUseCase.execute(Any()).onEach {
             when (it) {
                 is ApiResult.Success -> {
                     postDelay(1500) {
-                        _satellitesList.value = Resource.Success(it.response ?: emptyArray())
+                        satellitesList = it.response?.toMutableList() ?: mutableListOf()
+                        _satellitesListObservable.value = Resource.Success(satellitesList)
                     }
                 }
                 is ApiResult.Failure -> {
-                    _satellitesList.value = Resource.Failure(it.error)
+                    _satellitesListObservable.value = Resource.Failure(it.error)
                 }
             }
         }.launchIn(viewModelScope)
+    }
+
+    fun filterList(query: String) {
+        if (query.isEmpty()) {
+            _satellitesListObservable.value = Resource.Success(satellitesList)
+        } else {
+            val filteredList = mutableListOf<Satellite>()
+            satellitesList.forEach {
+                if (it.name.contains(query, true)) {
+                    filteredList.add(it)
+                }
+            }
+            _satellitesListObservable.value = Resource.Success(filteredList)
+        }
     }
 }
