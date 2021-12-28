@@ -9,7 +9,7 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class Satellite(
-    val id: String,
+    val id: Int,
     val active: Boolean,
     val name: String,
 ) : Parcelable

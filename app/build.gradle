@@ -48,7 +48,6 @@ ext {
     coroutine_core_version = "1.4.2"
     hilt_version = "2.38.1"
     hilt_lifecycler_version = "1.0.0-alpha03"
-    serialization_version = "1.3.2"
     retrofit_version = "2.9.0"
 }
 
@@ -79,9 +78,6 @@ dependencies {
     implementation "androidx.hilt:hilt-lifecycle-viewmodel:$hilt_lifecycler_version"
     implementation "com.google.dagger:hilt-android:$hilt_version"
     kapt "com.google.dagger:hilt-compiler:$hilt_version"
-
-    //Serialization
-    implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:$serialization_version"
 
     //Retrofit
     implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"

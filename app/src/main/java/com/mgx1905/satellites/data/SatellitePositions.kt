@@ -5,12 +5,12 @@ package com.mgx1905.satellites.data
  */
 
 data class SatellitePositions(
-    val list: List<SatellitesPositionInfo>,
+    val list: MutableList<SatellitesPositionInfo>,
 )
 
 data class SatellitesPositionInfo(
     val id: String,
-    val positions: List<Position>,
+    val positions: MutableList<Position>,
 )
 
 data class Position(
