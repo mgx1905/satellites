@@ -1,6 +1,7 @@
 package com.mgx1905.satellites.base.di
 
 import android.app.Application
+import com.mgx1905.satellites.base.container.AppContainer
 import dagger.hilt.android.HiltAndroidApp
 
 /**
@@ -9,4 +10,10 @@ import dagger.hilt.android.HiltAndroidApp
 
 @HiltAndroidApp
 class MyApplication : Application() {
+
+    override fun onCreate() {
+        super.onCreate()
+
+        AppContainer.init(this)
+    }
 }

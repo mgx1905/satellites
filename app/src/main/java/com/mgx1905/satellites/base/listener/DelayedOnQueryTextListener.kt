@@ -19,9 +19,13 @@ abstract class DelayedOnQueryTextListener : SearchView.OnQueryTextListener {
     override fun onQueryTextChange(s: String?): Boolean {
         runnable?.let { handler.removeCallbacks(it) }
         runnable = Runnable { onDelayerQueryTextChange(s) }
-        runnable?.let { handler.postDelayed(it, 300) }
+        runnable?.let { handler.postDelayed(it, DELAY_MILLIS) }
         return true
     }
 
     abstract fun onDelayerQueryTextChange(query: String?)
+
+    companion object {
+        private const val DELAY_MILLIS = 300L
+    }
 }

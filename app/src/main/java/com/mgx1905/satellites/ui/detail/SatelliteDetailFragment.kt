@@ -12,6 +12,7 @@ import com.mgx1905.satellites.base.ui.BaseFragment
 import com.mgx1905.satellites.data.Satellite
 import com.mgx1905.satellites.data.SatelliteDetail
 import com.mgx1905.satellites.databinding.FragmentSatellitesDetailBinding
+import com.mgx1905.satellites.utils.setLeftDrawable
 import com.mgx1905.satellites.utils.viewBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
@@ -41,8 +42,19 @@ class SatelliteDetailFragment : BaseFragment(R.layout.fragment_satellites_detail
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        initUI()
         observers()
         viewModel.getSatelliteDetail(satellite?.id ?: 0, isActive = satellite?.active)
+    }
+
+    private fun initUI() {
+        with(binding) {
+            if (satellite?.active == true) {
+                tvShipName.setLeftDrawable(R.drawable.ic_status_active)
+            } else {
+                tvShipName.setLeftDrawable(R.drawable.ic_status_passive)
+            }
+        }
     }
 
     private fun observers() {
@@ -55,7 +67,7 @@ class SatelliteDetailFragment : BaseFragment(R.layout.fragment_satellites_detail
                         setDetailInfo(it.data)
                     }
                     is Resource.Failure -> {
-                        showAlert(message = "Failure!", buttonText = "Close") {
+                        showAlert(message = it.message, buttonText = getString(R.string.close)) {
                             navigationListener.onBackPressed()
                         }
                     }
@@ -68,7 +80,7 @@ class SatelliteDetailFragment : BaseFragment(R.layout.fragment_satellites_detail
                         binding.tvLastPosition.text = "(${it.data.posX}, ${it.data.posY})"
                     }
                     is Resource.Failure -> {
-                        showAlert(message = "Failure!")
+                        showAlert(message = it.message)
                     }
                 }
             }.launchIn(viewLifecycleOwner.lifecycleScope)

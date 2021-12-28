@@ -1,6 +1,5 @@
 package com.mgx1905.satellites.ui.detail
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mgx1905.satellites.base.common.ApiResult
@@ -40,8 +39,8 @@ class SatelliteDetailViewModel @Inject constructor(
         satelliteDetailUseCase.execute(SatelliteDetailUseCase.SatelliteDetailParams(id)).onEach {
             when (it) {
                 is ApiResult.Success -> {
-                    postDelay(1500) {
-                        _satelliteDetailObservable.value = Resource.Success(it.response!!)
+                    postDelay(POST_DELAY) {
+                        it.response?.let { response -> _satelliteDetailObservable.value = Resource.Success(response) }
                         getCurrentPosition(id, isActive)
                     }
                 }
@@ -57,7 +56,7 @@ class SatelliteDetailViewModel @Inject constructor(
             when (it) {
                 is ApiResult.Success -> {
                     it.response?.let { positionList ->
-                        if (isActive == false) {
+                        if (isActive == false) { // if status passive, return first item from array
                             _satellitePositionObservable.value = Resource.Success(positionList[0])
                         } else {
                             handlePosition(positionList, isActive)
@@ -73,10 +72,15 @@ class SatelliteDetailViewModel @Inject constructor(
 
     private fun handlePosition(response: MutableList<Position>, isActive: Boolean?) {
         var currentCount = 0
-        viewModelScope.launchPeriodicAsync(3000, isActive) {
-            _satellitePositionObservable.value = Resource.Success(response[currentCount % 3])
+        viewModelScope.launchPeriodicAsync(REPEAT_MILLIS, isActive) {
+            _satellitePositionObservable.value = Resource.Success(response[currentCount % REPEAT_MODE])
             currentCount++
-            Log.i("timer", "Timer is running!")
         }
+    }
+
+    companion object {
+        private const val POST_DELAY = 1500L
+        private const val REPEAT_MILLIS = 3000L
+        private const val REPEAT_MODE = 3
     }
 }

@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.mgx1905.satellites.R
 import com.mgx1905.satellites.data.Satellite
 import com.mgx1905.satellites.databinding.ItemSatellitesBinding
+import com.mgx1905.satellites.utils.getString
 
 /**
  * Created by mgx1905 on 27.12.2021
@@ -49,10 +50,10 @@ class SatellitesListAdapter(private val onRowClick: (item: Satellite) -> Unit) :
         fun bind(item: Satellite) {
             binding.tvSatellite.text = item.name
             if (item.active) {
-                binding.tvStatus.text = "Active"
+                binding.tvStatus.text = getString(R.string.active)
                 binding.ivStatus.setBackgroundResource(R.drawable.ic_status_active)
             } else {
-                binding.tvStatus.text = "Passive"
+                binding.tvStatus.text = getString(R.string.passive)
                 binding.ivStatus.setBackgroundResource(R.drawable.ic_status_passive)
             }
         }

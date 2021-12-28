@@ -1,7 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
-    id 'kotlin-android-extensions'
+    id 'kotlin-parcelize'
     id 'kotlin-kapt'
     id 'dagger.hilt.android.plugin'
 }
@@ -46,7 +46,7 @@ ext {
     lifecycle_version = "2.3.1"
     coroutines_version = "1.5.0"
     coroutine_core_version = "1.4.2"
-    hilt_version = "2.38.1"
+    hilt_version = "2.40.5"
     hilt_lifecycler_version = "1.0.0-alpha03"
     retrofit_version = "2.9.0"
 }

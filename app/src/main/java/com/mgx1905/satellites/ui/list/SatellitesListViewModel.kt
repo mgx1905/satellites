@@ -36,7 +36,7 @@ class SatellitesListViewModel @Inject constructor(private val satellitesListUseC
         satellitesListUseCase.execute(Any()).onEach {
             when (it) {
                 is ApiResult.Success -> {
-                    postDelay(1500) {
+                    postDelay(POST_DELAY) {
                         satellitesList = it.response?.toMutableList() ?: mutableListOf()
                         _satellitesListObservable.value = Resource.Success(satellitesList)
                     }
@@ -52,13 +52,12 @@ class SatellitesListViewModel @Inject constructor(private val satellitesListUseC
         if (query.isEmpty()) {
             _satellitesListObservable.value = Resource.Success(satellitesList)
         } else {
-            val filteredList = mutableListOf<Satellite>()
-            satellitesList.forEach {
-                if (it.name.contains(query, true)) {
-                    filteredList.add(it)
-                }
-            }
+            val filteredList = satellitesList.filter { it.name.contains(query, true) }.toMutableList()
             _satellitesListObservable.value = Resource.Success(filteredList)
         }
+    }
+
+    companion object {
+        private const val POST_DELAY = 1500L
     }
 }

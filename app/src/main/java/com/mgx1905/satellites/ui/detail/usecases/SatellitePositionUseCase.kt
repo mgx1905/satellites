@@ -21,7 +21,5 @@ class SatellitePositionUseCase @Inject constructor(private val satelliteDetailRe
         )
     }
 
-    data class SatellitePositionsParams(
-        val id: Int
-    )
+    data class SatellitePositionsParams(val id: Int)
 }

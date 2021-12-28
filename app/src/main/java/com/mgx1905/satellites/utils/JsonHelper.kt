@@ -1,6 +1,5 @@
 package com.mgx1905.satellites.utils
 
-import android.content.Context
 import java.io.IOException
 import java.io.InputStream
 import java.nio.charset.Charset
@@ -10,9 +9,8 @@ import java.nio.charset.Charset
  */
 
 object JsonHelper {
-    fun readFromAsset(context: Context, filename: String): String? {
-        var json: String? = null
-        json = try {
+    fun readFromAsset(filename: String): String? {
+        val json = try {
             val input: InputStream = context.assets.open("${filename}.json")
             val size: Int = input.available()
             val buffer = ByteArray(size)

@@ -13,5 +13,4 @@ interface NavigationListener {
     fun onBackPressed()
 
     fun navigateBack(tag: String)
-
 }

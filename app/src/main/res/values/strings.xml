@@ -1,3 +1,20 @@
 <resources>
-    <string name="app_name">satellites</string>
+    <string name="app_name">Satellites</string>
+
+    <!--Actions-->
+    <string name="close">Close</string>
+    <string name="active">Active</string>
+    <string name="passive">Passive</string>
+    <string name="ok">OK</string>
+
+    <!--Errors-->
+    <string name="failure">Failure!</string>
+    <string name="parse_error">Parse Error!</string>
+    <string name="id_not_founded">Selected id not founded!</string>
+    <string name="unknown_error">An unknown error occurred!</string>
+
+    <!--Satellites List-->
+    <string name="height_mass">Height/Mass: </string>
+    <string name="cost">Cost: </string>
+    <string name="last_position">Last Position: </string>
 </resources>

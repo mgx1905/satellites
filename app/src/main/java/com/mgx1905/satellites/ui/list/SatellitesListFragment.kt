@@ -13,6 +13,7 @@ import com.mgx1905.satellites.base.ui.BaseFragment
 import com.mgx1905.satellites.databinding.FragmentSatellitesListBinding
 import com.mgx1905.satellites.ui.detail.SatelliteDetailFragment
 import com.mgx1905.satellites.ui.list.adapter.SatellitesListAdapter
+import com.mgx1905.satellites.utils.EMPTY
 import com.mgx1905.satellites.utils.viewBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
@@ -57,7 +58,7 @@ class SatellitesListFragment : BaseFragment(R.layout.fragment_satellites_list) {
     private fun listeners() {
         binding.searchView.setOnQueryTextListener(object : DelayedOnQueryTextListener() {
             override fun onDelayerQueryTextChange(query: String?) {
-                viewModel.filterList(query ?: "")
+                viewModel.filterList(query ?: EMPTY)
             }
         })
     }
@@ -72,7 +73,7 @@ class SatellitesListFragment : BaseFragment(R.layout.fragment_satellites_list) {
                     }
 
                     is Resource.Failure -> {
-                        showAlert(message = "Failure!")
+                        showAlert(message = it.message)
                     }
                 }
             }.launchIn(viewLifecycleOwner.lifecycleScope)
